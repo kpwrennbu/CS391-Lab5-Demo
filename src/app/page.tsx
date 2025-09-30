@@ -4,59 +4,64 @@ import { useState } from 'react';
 import { Input, InputNumber, Button, List, Empty, Space, Typography, Spin, Alert } from 'antd';
 const { Title } = Typography;
 
-// TODO(2): set API base (ONE LINE) – using PokeAPI so no keys needed
+// TODO(2): read API base from env (ONE LINE) – fallback to PokeAPI
 
 export default function Page() {
-  const [q, setQ] = useState('');          // search text
-  const [limit, setLimit] = useState<number>(10);
-  const [items, setItems] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  // --- STATE SETUP ---
+  // TODO(3a): search text state (ONE LINE)
+
+  // TODO(3b): limit (number) state with default 10 (ONE LINE)
+
+  // TODO(3c): items array state (ONE LINE)
+
+  // TODO(3d): loading boolean state (ONE LINE)
+
+  // TODO(3e): error string-or-null state (ONE LINE)
+  
 
   async function fetchData() {
-    setLoading(true); setErr(null);
+    // small UX helpers
+    // TODO(4a): set loading true and clear err (ONE LINE)
     try {
-      // TODO(3): build URL with a query param (ONE LINE)
+      // --- FETCH ---
+      // TODO(4b): build URL with query param (ONE LINE)
 
       const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      // TODO(4): set names from results (ONE LINE)
+      // --- TRANSFORM ---
+      // TODO(4c): pull names array from data.results (ONE LINE)
 
-      // TODO(5): simple client-side filter by q (ONE LINE)
+      // TODO(4d): client filter names by q (ONE LINE)
 
-      setItems(filtered);
+      // TODO(4e): save filtered array to state (ONE LINE)
     } catch (e: any) {
-      setErr(e.message ?? 'Unknown error');
+      // TODO(4f): set error message to state (ONE LINE)
     } finally {
-      setLoading(false);
+      // TODO(4g): set loading false (ONE LINE)
     }
   }
 
   return (
     <div style={{ padding: 24, maxWidth: 720 }}>
-      <Title level={3}>Mini Demo: AntD + API Params</Title>
+      {/* TODO(5): Title element (ONE LINE) */}
+
       <p>Type a filter and choose a limit (query param), then click Fetch.</p>
 
       <Space align="start" style={{ marginBottom: 12 }}>
-        <Input placeholder="filter (e.g., pi, char)" value={q} onChange={(e) => setQ(e.target.value)} style={{ width: 260 }} />
+        {/* TODO(6a): Input for q (ONE LINE) */}
+
+        {/* InputNumber is optional; included for numeric param demo */}
         <InputNumber min={1} max={1000} value={limit} onChange={(v) => setLimit(Number(v ?? 10))} />
-        <Button type="primary" onClick={fetchData}>Fetch</Button>
+
+        {/* TODO(6b): Button to run fetchData (ONE LINE) */}
       </Space>
 
       {loading && <Spin />}
       {err && <Alert type="error" message={err} style={{ marginBottom: 12 }} />}
 
-      {(!loading && !err && items.length === 0) ? (
-        <Empty description="No data" />
-      ) : (
-        <List
-          bordered
-          dataSource={items}
-          // TODO(6): render each item (ONE LINE)
-        />
-      )}
+      {/* TODO(7): conditional Empty vs List block (PASTE 5-7 lines) */}
     </div>
   );
 }
