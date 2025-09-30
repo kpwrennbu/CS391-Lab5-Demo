@@ -1,5 +1,5 @@
 // TODO(1): import AntD reset css (ONE LINE)
-import 'antd/dist/reset.css';
+
 import type { Metadata } from 'next';
 import React from 'react';
 

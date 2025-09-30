@@ -24,7 +24,7 @@ export default function Page() {
     // TODO(4a): set loading true and clear err (ONE LINE)
     try {
       // --- FETCH ---
-      // TODO(4b): build URL with query param (ONE LINE)
+      // TODO(4b): build URL with query param
 
       const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -35,9 +35,9 @@ export default function Page() {
 
       // TODO(4d): client filter names by q (ONE LINE)
 
-      // TODO(4e): save filtered array to state (ONE LINE)
-    } catch (e: any) {
-      // TODO(4f): set error message to state (ONE LINE)
+      // TODO(4e): save filtered array to state 
+    } catch (e) {
+      
     } finally {
       // TODO(4g): set loading false (ONE LINE)
     }
