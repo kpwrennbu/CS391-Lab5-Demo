@@ -1,15 +1,19 @@
-# 🧪 Next.js + AntD — Two‑File Mini Demo
-
-A **super simple** lab demo that touches only **two files** and uses short **TODOs (1–2 lines each)**.  
-Students will:
-- Scaffold a Next.js app with `npx`
-- Add Ant Design (AntD)
-- Call a public API **with a query param**
-- See core Next.js App Router concepts (client component, fetch, caching note)
+Perfect 👍 Here’s the rebuilt **README.md** for your demo repo — now with **all TODO answers and explanations filled in**. It’s structured so you can hand it to students, demo the TODOs live, and they can see the reasoning behind each one.
 
 ---
 
-## 0) Create the app & install AntD
+# 🧪 Next.js + AntD — Three-File Mini Demo
+
+This lab shows how to use **Next.js (App Router)** with **Ant Design (AntD)** and call an API with query params.
+Students only need to touch **three files**:
+
+1. `app/layout.tsx` → global wrapper (1 TODO)
+2. `app/page.tsx` → interactive page (many TODOs, each 1–2 lines)
+3. `.env.local` → API base URL (1 TODO)
+
+---
+
+## 0) Scaffold & install
 
 ```bash
 npx create-next-app@latest next-antd-mini --typescript --app --eslint
@@ -17,16 +21,16 @@ cd next-antd-mini
 npm i antd @ant-design/cssinjs
 ```
 
-> **Why**: `create-next-app` scaffolds a Next.js project. We choose **TypeScript** and **App Router** so the files here drop in cleanly. AntD gives us polished UI components quickly.
+> **Why:** App Router + TypeScript demonstrate modern Next.js.
+> AntD gives prebuilt components so we focus on data + logic instead of CSS.
 
 ---
 
-## 1) Replace just TWO files
+## 1) Drop in these three files
 
-Put these two files into your project (overwriting existing ones):
-
-- `app/layout.tsx` — global HTML shell
-- `app/page.tsx` — the only page in this demo
+* `app/layout.tsx` — global shell
+* `app/page.tsx` — interactive page
+* `.env.local` — API base
 
 Then run:
 
@@ -37,7 +41,35 @@ npm run dev
 
 ---
 
-# File 1: `app/layout.tsx` (ONE TODO)
+## Key Next.js concepts (for your short lecture)
+
+### `app/layout.tsx` (Server Component)
+
+* Wraps every route under `app/`.
+* Only runs on the server, not in the browser.
+* Good place for global CSS, fonts, or layout skeletons.
+
+### `app/page.tsx` (Client Component)
+
+* Adding `'use client'` makes it a **Client Component**, so it can:
+
+  * use React hooks (`useState`, `useEffect`)
+  * respond to browser events
+  * access client-visible env vars (`NEXT_PUBLIC_*`)
+
+### Env var rule
+
+* Client Components need `NEXT_PUBLIC_…` prefix (gets bundled for browser).
+* Server-only secrets should **not** have that prefix.
+
+### Caching
+
+* In fetch: `{ cache: 'no-store' }` forces a fresh request every time.
+* Without it, Next may cache aggressively.
+
+---
+
+# File 1: `app/layout.tsx`
 
 ```tsx
 // TODO(1): import AntD reset css (ONE LINE)
@@ -47,7 +79,7 @@ import React from 'react';
 
 export const metadata: Metadata = {
   title: 'Mini Demo',
-  description: 'Next + AntD + API params',
+  description: 'Next + AntD + API params via env',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -59,18 +91,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-### ✅ TODO(1) — Answer & Explanation
-**Answer line:**  
+### ✅ TODO(1) Answer
+
 ```ts
 import 'antd/dist/reset.css';
 ```
-**What it does:** Imports AntD’s baseline CSS so AntD components render with consistent styles. In the App Router, `app/layout.tsx` wraps **every page**, so global CSS belongs here.
 
-> **Next concept**: `layout.tsx` is a **Server Component** by default and defines the HTML scaffold for all routes under `app/`. Global CSS imports must be in a layout or in `globals.css`.
+**Why:** Loads global AntD styles. In App Router, global CSS must be imported in a `layout.tsx`.
 
 ---
 
-# File 2: `app/page.tsx` (FIVE tiny TODOs)
+# File 2: `app/page.tsx`
 
 ```tsx
 'use client';
@@ -79,222 +110,164 @@ import { useState } from 'react';
 import { Input, InputNumber, Button, List, Empty, Space, Typography, Spin, Alert } from 'antd';
 const { Title } = Typography;
 
-// TODO(2): set API base (ONE LINE) – using PokeAPI so no keys needed
+// TODO(2): read API base from env (ONE LINE) – fallback to PokeAPI
 
 export default function Page() {
-  const [q, setQ] = useState('');          // search text
-  const [limit, setLimit] = useState<number>(10);
-  const [items, setItems] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  // --- STATE SETUP ---
+  // TODO(3a): search text state (ONE LINE)
+  // TODO(3b): limit (number) state with default 10 (ONE LINE)
+  // TODO(3c): items array state (ONE LINE)
+  // TODO(3d): loading boolean state (ONE LINE)
+  // TODO(3e): error string-or-null state (ONE LINE)
 
   async function fetchData() {
-    setLoading(true); setErr(null);
+    // small UX helpers
+    // TODO(4a): set loading true and clear err (ONE LINE)
     try {
-      // TODO(3): build URL with a query param (ONE LINE)
+      // --- FETCH ---
+      // TODO(4b): build URL with query param (ONE LINE)
 
       const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      // TODO(4): set names from results (ONE LINE)
+      // --- TRANSFORM ---
+      // TODO(4c): pull names array from data.results (ONE LINE)
 
-      // TODO(5): simple client-side filter by q (ONE LINE)
+      // TODO(4d): client filter names by q (ONE LINE)
 
-      setItems(filtered);
+      // TODO(4e): save filtered array to state (ONE LINE)
     } catch (e: any) {
-      setErr(e.message ?? 'Unknown error');
+      // TODO(4f): set error message to state (ONE LINE)
     } finally {
-      setLoading(false);
+      // TODO(4g): set loading false (ONE LINE)
     }
   }
 
   return (
     <div style={{ padding: 24, maxWidth: 720 }}>
-      <Title level={3}>Mini Demo: AntD + API Params</Title>
+      {/* TODO(5): Title element (ONE LINE) */}
+
       <p>Type a filter and choose a limit (query param), then click Fetch.</p>
 
       <Space align="start" style={{ marginBottom: 12 }}>
-        <Input placeholder="filter (e.g., pi, char)" value={q} onChange={(e) => setQ(e.target.value)} style={{ width: 260 }} />
+        {/* TODO(6a): Input for q (ONE LINE) */}
+
+        {/* InputNumber is optional; included for numeric param demo */}
         <InputNumber min={1} max={1000} value={limit} onChange={(v) => setLimit(Number(v ?? 10))} />
-        <Button type="primary" onClick={fetchData}>Fetch</Button>
+
+        {/* TODO(6b): Button to run fetchData (ONE LINE) */}
       </Space>
 
       {loading && <Spin />}
       {err && <Alert type="error" message={err} style={{ marginBottom: 12 }} />}
 
-      {(!loading && !err && items.length === 0) ? (
-        <Empty description="No data" />
-      ) : (
-        <List
-          bordered
-          dataSource={items}
-          // TODO(6): render each item (ONE LINE)
-        />
-      )}
+      {/* TODO(7): conditional Empty vs List block (PASTE 5-7 lines) */}
     </div>
   );
 }
 ```
 
-### ✅ TODO(2) — Answer & Explanation
-**Answer line:**
-```ts
-const API_BASE = 'https://pokeapi.co/api/v2';
-```
-**What it does:** Sets a constant for the upstream API. Keeping the base URL separate mirrors real projects (later you’d move this to env vars).
-
-**Next concept:** Client Components (marked with `'use client'`) run in the browser. We’re doing an interaction-driven fetch here, so a Client Component makes sense.
-
 ---
 
-### ✅ TODO(3) — Answer & Explanation
-**Answer line:**
+## ✅ Answers for TODOs
+
+### TODO(2) — Env base
+
 ```ts
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://pokeapi.co/api/v2';
+```
+
+### TODO(3a–3e) — State
+
+```ts
+const [q, setQ] = useState('');
+const [limit, setLimit] = useState<number>(10);
+const [items, setItems] = useState<string[]>([]);
+const [loading, setLoading] = useState(false);
+const [err, setErr] = useState<string | null>(null);
+```
+
+### TODO(4a–4g) — Fetch flow
+
+```ts
+setLoading(true); setErr(null);
+
 const url = `${API_BASE}/pokemon?limit=${limit}`;
-```
-**What it does:** Builds the request URL and injects a **query parameter** (`limit`). The fetch will return `limit` number of Pokémon from the API.
 
-**Next concept:** Query params are how the client passes options to an endpoint. You can open DevTools Network tab to show the request URL.
-
----
-
-### ✅ TODO(4) — Answer & Explanation
-**Answer line:**
-```ts
 const names: string[] = (data.results ?? []).map((x: any) => x.name);
-```
-**What it does:** Normalizes the API response to just an array of `name` strings. Defensive `?? []` avoids crashes if the response is missing fields.
 
-**Next concept:** Shape your data ASAP; small, typed arrays are much easier to render and test.
-
----
-
-### ✅ TODO(5) — Answer & Explanation
-**Answer line:**
-```ts
 const filtered = q ? names.filter((n) => n.includes(q.toLowerCase())) : names;
+
+setItems(filtered);
+
+setErr(e.message ?? 'Unknown error');
+
+setLoading(false);
 ```
-**What it does:** Performs a **client-side** filter so students see immediate feedback without extra API complexity. `q` is the controlled input value.
 
-**Next concept:** Start with client-side filtering; if performance becomes a problem, move filtering to an API route (server).
+### TODO(5) — Title
 
----
-
-### ✅ TODO(6) — Answer & Explanation
-**Answer line inside `<List />`:**
 ```tsx
-renderItem={(name) => <List.Item>{name}</List.Item>}
+<Title level={3}>Mini Demo: AntD + API Params via .env</Title>
 ```
-**What it does:** Renders each string as a simple AntD list row.
 
-**Next concept:** AntD gives polished primitives (`List`, `Input`, `Button`) so you can focus on data flow rather than CSS.
+### TODO(6a) — Input
 
----
-
-## What to type during the demo
-- In the input: `pi`, `char`, `squirt`, etc.
-- Change **limit** (e.g., `100`) to demonstrate query params changing the network request.
-
----
-
-## Where this teaches “Next.js” (explicitly)
-- **App Router**: `app/layout.tsx` (global shell) and `app/page.tsx` (route `/`).
-- **Client vs Server**: `'use client'` on the page to enable state, events, and browser `fetch`.
-- **Caching hint**: `{ cache: 'no-store' }` ensures each click re-fetches (good for demos).
-- **Global CSS**: Lives in a layout (server) so components render correctly everywhere.
-
----
-
-## Full source (drop-in)
-
-### `app/layout.tsx`
 ```tsx
-// TODO(1): import AntD reset css (ONE LINE)
-
-import type { Metadata } from 'next';
-import React from 'react';
-
-export const metadata: Metadata = {
-  title: 'Mini Demo',
-  description: 'Next + AntD + API params',
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
-}
+<Input
+  placeholder="filter (e.g., pi, char)"
+  value={q}
+  onChange={(e) => setQ(e.target.value)}
+  style={{ width: 260 }}
+/>
 ```
 
-### `app/page.tsx`
+### TODO(6b) — Button
+
 ```tsx
-'use client';
+<Button type="primary" onClick={fetchData}>Fetch</Button>
+```
 
-import { useState } from 'react';
-import { Input, InputNumber, Button, List, Empty, Space, Typography, Spin, Alert } from 'antd';
-const { Title } = Typography;
+### TODO(7) — Empty vs List
 
-// TODO(2): set API base (ONE LINE) – using PokeAPI so no keys needed
-
-export default function Page() {
-  const [q, setQ] = useState('');          // search text
-  const [limit, setLimit] = useState<number>(10);
-  const [items, setItems] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-
-  async function fetchData() {
-    setLoading(true); setErr(null);
-    try {
-      // TODO(3): build URL with a query param (ONE LINE)
-
-      const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) throw new Error(\`HTTP \${res.status}\`);
-      const data = await res.json();
-
-      // TODO(4): set names from results (ONE LINE)
-
-      // TODO(5): simple client-side filter by q (ONE LINE)
-
-      setItems(filtered);
-    } catch (e: any) {
-      setErr(e.message ?? 'Unknown error');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <div style={{ padding: 24, maxWidth: 720 }}>
-      <Title level={3}>Mini Demo: AntD + API Params</Title>
-      <p>Type a filter and choose a limit (query param), then click Fetch.</p>
-
-      <Space align="start" style={{ marginBottom: 12 }}>
-        <Input placeholder="filter (e.g., pi, char)" value={q} onChange={(e) => setQ(e.target.value)} style={{ width: 260 }} />
-        <InputNumber min={1} max={1000} value={limit} onChange={(v) => setLimit(Number(v ?? 10))} />
-        <Button type="primary" onClick={fetchData}>Fetch</Button>
-      </Space>
-
-      {loading && <Spin />}
-      {err && <Alert type="error" message={err} style={{ marginBottom: 12 }} />}
-
-      {(!loading && !err && items.length === 0) ? (
-        <Empty description="No data" />
-      ) : (
-        <List
-          bordered
-          dataSource={items}
-          // TODO(6): render each item (ONE LINE)
-        />
-      )}
-    </div>
-  );
-}
+```tsx
+{(!loading && !err && items.length === 0) ? (
+  <Empty description="No data" />
+) : (
+  <List
+    bordered
+    dataSource={items}
+    renderItem={(name) => <List.Item>{name}</List.Item>}
+  />
+)}
 ```
 
 ---
 
-Happy teaching! 🎓
+# File 3: `.env.local`
+
+```env
+# TODO(8): set public API base (ONE LINE). Must start with NEXT_PUBLIC_ to be readable in the browser.
+NEXT_PUBLIC_API_BASE=https://pokeapi.co/api/v2
+```
+
+**Why:** Client code can only access env vars prefixed with `NEXT_PUBLIC_`. Restart `npm run dev` after editing.
+
+---
+
+## Demo Flow (what to show live)
+
+1. Show `.env.local` → explain `NEXT_PUBLIC_`.
+2. Change limit from 10 → 100 → show URL with `?limit=100`.
+3. Type “pi” → watch filtering in real time.
+4. Break the API URL → trigger error → see `<Alert>`.
+5. Clear input → show Empty state.
+
+---
+
+✅ This README teaches both **React state flow** and **Next.js App Router basics**, with AntD sprinkled in to make the UI look polished.
+
+---
+
+Do you want me to package this back into a **zip with the updated README + source files**, like before, so you can drop it straight into your lab repo?
