@@ -1,95 +1,62 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { Input, InputNumber, Button, List, Empty, Space, Typography, Spin, Alert } from 'antd';
+const { Title } = Typography;
+
+// TODO(2): set API base (ONE LINE) – using PokeAPI so no keys needed
+
+export default function Page() {
+  const [q, setQ] = useState('');          // search text
+  const [limit, setLimit] = useState<number>(10);
+  const [items, setItems] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function fetchData() {
+    setLoading(true); setErr(null);
+    try {
+      // TODO(3): build URL with a query param (ONE LINE)
+
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      // TODO(4): set names from results (ONE LINE)
+
+      // TODO(5): simple client-side filter by q (ONE LINE)
+
+      setItems(filtered);
+    } catch (e: any) {
+      setErr(e.message ?? 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div style={{ padding: 24, maxWidth: 720 }}>
+      <Title level={3}>Mini Demo: AntD + API Params</Title>
+      <p>Type a filter and choose a limit (query param), then click Fetch.</p>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <Space align="start" style={{ marginBottom: 12 }}>
+        <Input placeholder="filter (e.g., pi, char)" value={q} onChange={(e) => setQ(e.target.value)} style={{ width: 260 }} />
+        <InputNumber min={1} max={1000} value={limit} onChange={(v) => setLimit(Number(v ?? 10))} />
+        <Button type="primary" onClick={fetchData}>Fetch</Button>
+      </Space>
+
+      {loading && <Spin />}
+      {err && <Alert type="error" message={err} style={{ marginBottom: 12 }} />}
+
+      {(!loading && !err && items.length === 0) ? (
+        <Empty description="No data" />
+      ) : (
+        <List
+          bordered
+          dataSource={items}
+          // TODO(6): render each item (ONE LINE)
+        />
+      )}
     </div>
   );
 }
