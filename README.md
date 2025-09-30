@@ -197,7 +197,8 @@ const url = `${API_BASE}/pokemon?limit=${limit}`;
 
 const names: string[] = (data.results ?? []).map((x: any) => x.name);
 
-const filtered = q ? names.filter((n) => n.includes(q.toLowerCase())) : names;
+type PokemonResult = { name: string; url: string };
+const names: string[] = (data.results ?? []).map((x: PokemonResult) => x.name);
 
 setItems(filtered);
 
