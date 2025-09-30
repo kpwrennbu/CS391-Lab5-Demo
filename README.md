@@ -202,8 +202,13 @@ const names: string[] = (data.results ?? []).map((x: PokemonResult) => x.name);
 
 setItems(filtered);
 
-setErr(e.message ?? 'Unknown error');
+if (e instanceof Error) {
+        setErr(e.message);
+      } else {
+        setErr('Unknown error');
+      }
 
+      
 setLoading(false);
 ```
 
